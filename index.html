@@ -1,24 +1,55 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Grid</title>
-    <meta name="description" content="Check your Memory Power, Improve it fsater ever before">
-    <meta name="keywords" content="Memory ,Power, Game, Grid">
-    <meta name="Developer" content="Gopal N D">
-    <!-- og(open graph) tags are used in social media  -->
-    <meta property="og:title" content="Improve it fsater ever before, Check your Memory Power ">
-    <meta property="og:description" content="rid of face-down cards that users flip to find matching pairs.">
-    <meta property="og:image" content="./assets/download.png">
-    <meta property="og:url" content="https://gopal-nd.github.io/typewrite/">
-    <meta property="og:type" content="website" />
-    <!-- website refresh  -->
-    <meta http-equiv="refresh" content="5" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Grid</title>
+  <meta name="description" content="Check your Memory Power, Improve it fsater ever before">
+  <meta name="keywords" content="Memory ,Power, Game, Grid">
+  <meta name="Developer" content="Gopal N D">
+  <!-- og(open graph) tags are used in social media  -->
+  <meta property="og:title" content="Improve it fsater ever before, Check your Memory Power ">
+  <meta property="og:description" content="rid of face-down cards that users flip to find matching pairs.">
+  <meta property="og:image" content="./assets/download.png">
+  <meta property="og:url" content="https://gopal-nd.github.io/typewrite/">
+  <meta property="og:type" content="website" />
+  <!-- website refresh  -->
+  <!-- <meta http-equiv="refresh" content="5" /> -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
-<body>
-    <h1>Will be Soon</h1>
-    <img src="./assets/download.png" alt="">
+<body class="bg-black text-white flex flex-col items-center py-4 w-full h-full">
+  <h1 class="text-3xl font-bold mb-4">Memory Grid Game</h1>
+  <div class="mb-4">
+    <input type="range" id="gridSize" min="2" max="10" step="2" value="2" class="">
+    <p>Grid Size: <span id="gridSizeValue">2</span></p>
+  </div>
+  <div id="grid" class="grid gap-2 p-4 w-full "></div>
+  <script>
+    const gridSizeInput = document.getElementById('gridSize');
+    const gridSizeValue = document.getElementById('gridSizeValue');
+    const grid = document.getElementById('grid');
+
+    function createGrid(n) {
+      grid.innerHTML = '';
+      grid.className = `grid gap-2 p-4 grid-rows-${n} grid-cols-${n}`;
+      const totalCards = n * n;
+      for (let i = 0; i < totalCards; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'bg-gray-800 rounded-md p-4 text-center';
+        cell.textContent = '?';
+        grid.appendChild(cell);
+      }
+    }
+
+    gridSizeInput.addEventListener('input', () => {
+      const n = Number(gridSizeInput.value);
+      gridSizeValue.textContent = n;
+      createGrid(n);
+    });
+
+    createGrid(Number(gridSizeInput.value));
+  </script>
 </body>
 </html>

@@ -17,6 +17,15 @@
   <!-- website refresh  -->
   <!-- <meta http-equiv="refresh" content="5" /> -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+     .matched {
+      background-color: green !important;
+      pointer-events: none;
+    }
+    .selected {
+      outline: 2px solid yellow;
+    }
+  </style>
 
 </head>
 <body class="bg-black text-white text-center m-10  h-full">
@@ -69,15 +78,43 @@
         const cell = document.createElement('div');
         cell.className = 'bg-gray-800 rounded-md p-4 text-center ';
         cell.textContent = compareCombination[i];
-        cell.dataset.value = i
-        cell.addEventListener('click',(e)=>{
-          e.stopPropagation();
-          console.log(cell.dataset.value)
-
-        })
+        cell.dataset.value = compareCombination[i];
+        cell.addEventListener('click',handleCardClick)
         grid.appendChild(cell);
       }
       
+    }
+
+    function handleCardClick(e){
+      e.stopPropagation()
+      const cell = e.currentTarget
+      console.log(cell)
+      if(cell.classList.contains('matched')) return;
+      if(!first){
+        first= cell
+        cell.classList.add('selected'); // Optionally highlight the first cell.
+        return;
+      }
+
+      if(first ===cell)return;
+
+      second =cell;
+
+      if (first.dataset.value === second.dataset.value) {
+        // If they match, add the "matched" class to both.
+        first.classList.add('matched');
+        second.classList.add('matched');
+        console.log('Match found!');
+      } else {
+        // cell.classList.add('selected'); 
+        console.log('Not a match.');
+      }
+
+      if(first) first.classList.remove('selected');
+      first = null;
+      second = null;
+    
+
     }
 
     gridSizeInput.addEventListener('input', () => {
@@ -88,9 +125,7 @@
     });
 
     createGrid(Number(gridSizeInput.value));
-    divs.forEach((div)=>{
 
-    })
   </script>
 </body>
 </html>

@@ -19,37 +19,78 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
-<body class="bg-black text-white flex flex-col items-center py-4 w-full h-full">
+<body class="bg-black text-white text-center m-10  h-full">
   <h1 class="text-3xl font-bold mb-4">Memory Grid Game</h1>
   <div class="mb-4">
     <input type="range" id="gridSize" min="2" max="10" step="2" value="2" class="">
     <p>Grid Size: <span id="gridSizeValue">2</span></p>
   </div>
-  <div id="grid" class="grid gap-2 p-4 w-full "></div>
+  <div id="grid" class="grid gap-2 p-4  "></div>
   <script>
     const gridSizeInput = document.getElementById('gridSize');
     const gridSizeValue = document.getElementById('gridSizeValue');
     const grid = document.getElementById('grid');
+    let divs = grid.querySelectorAll('div')
+    let combinations =[]
+    let compareCombination =[]
+    let first = null
+    let second = null
+    GenerateCombinations(2);
+
+    function ShuffleElement(arr){
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function GenerateCombinations(n){
+      combinations=[]
+      compareCombination=[]
+      let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      for(let i=0;i<n;i++){
+        for(let j=0;j<n;j++){
+          combinations.push(letters[i]+letters[j])
+        }
+      }
+      combinations = combinations.slice(0,n*n/2)
+      compareCombination = combinations.concat(combinations)
+      compareCombination = ShuffleElement(compareCombination)
+      console.log(compareCombination)
+      createGrid(n);
+    }
 
     function createGrid(n) {
       grid.innerHTML = '';
-      grid.className = `grid gap-2 p-4 grid-rows-${n} grid-cols-${n}`;
+      grid.className = `grid gap-2 p-4 grid-rows-${n} grid-cols-${n} `;
       const totalCards = n * n;
       for (let i = 0; i < totalCards; i++) {
         const cell = document.createElement('div');
-        cell.className = 'bg-gray-800 rounded-md p-4 text-center';
-        cell.textContent = '?';
+        cell.className = 'bg-gray-800 rounded-md p-4 text-center ';
+        cell.textContent = compareCombination[i];
+        cell.dataset.value = i
+        cell.addEventListener('click',(e)=>{
+          e.stopPropagation();
+          console.log(cell.dataset.value)
+
+        })
         grid.appendChild(cell);
       }
+      
     }
 
     gridSizeInput.addEventListener('input', () => {
       const n = Number(gridSizeInput.value);
       gridSizeValue.textContent = n;
-      createGrid(n);
+      GenerateCombinations(n)
+    
     });
 
     createGrid(Number(gridSizeInput.value));
+    divs.forEach((div)=>{
+
+    })
   </script>
 </body>
 </html>

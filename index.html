@@ -71,13 +71,15 @@
     }
 
     function createGrid(n) {
+      first=null;
+      second=null;
       grid.innerHTML = '';
       grid.className = `grid gap-2 p-4 grid-rows-${n} grid-cols-${n} `;
       const totalCards = n * n;
       for (let i = 0; i < totalCards; i++) {
         const cell = document.createElement('div');
         cell.className = 'bg-gray-800 rounded-md p-4 text-center ';
-        cell.textContent = compareCombination[i];
+        cell.textContent = '?'
         cell.dataset.value = compareCombination[i];
         cell.addEventListener('click',handleCardClick)
         grid.appendChild(cell);
@@ -89,31 +91,40 @@
       e.stopPropagation()
       const cell = e.currentTarget
       console.log(cell)
-      if(cell.classList.contains('matched')) return;
+      if(cell.classList.contains('matched')|| cell.textContent!=='?') return;
+      cell.textContent = cell.dataset.value
+
       if(!first){
         first= cell
-        cell.classList.add('selected'); // Optionally highlight the first cell.
+        cell.classList.add('selected'); 
         return;
       }
 
       if(first ===cell)return;
 
       second =cell;
+      
 
       if (first.dataset.value === second.dataset.value) {
-        // If they match, add the "matched" class to both.
+        
         first.classList.add('matched');
         second.classList.add('matched');
+        first.classList.remove('selected');
+        
+        first = null;
+        second = null;
         console.log('Match found!');
       } else {
-        // cell.classList.add('selected'); 
         console.log('Not a match.');
+        
+        setTimeout(() => {
+          first.textContent = '?';
+          second.textContent = '?';
+          first.classList.remove('selected');
+          first = null;
+          second = null;
+        }, 500);
       }
-
-      if(first) first.classList.remove('selected');
-      first = null;
-      second = null;
-    
 
     }
 

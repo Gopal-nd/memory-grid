@@ -20,8 +20,8 @@
 <link rel="stylesheet" href="index.css">
 
 </head>
-<body class="bg-black text-white flex flex-col justify-between  text-center m-10  h-full">
-  <h1 class="text-3xl font-bold mb-4 text-green-500 ">Memory Grid Game</h1>
+<body class="bg-black text-white flex flex-col justify-between  text-center max-w-4xl mx-auto h-full">
+  <h1 class="text-3xl font-bold text-green-500 ">Memory Grid Game</h1>
   <div class="mb-4 text-green-500 ">
     <input type="range" id="gridSize" min="2" max="10" step="2" value="2" class="text-green-500" >
     <p>Grid Size: <span id="gridSizeValue">2</span></p>
@@ -30,21 +30,21 @@
 
   <div class="flex items-center justify-center flex-col gap-2 p-10">
       <h1 class="text-center text-2xl text-green-500 font-semibold">Past Games</h1>
-      <table class="border-collapse mb-10 text-green-500 ">
+      <table class="border-collapse mb-10 text-green-500 overflow-hidden  m-1 sm:w-full ">
         <thead>
           <tr>
-            <th class="border px-4 py-2">Date and Time</th>
-            <th class="border px-4 py-2">No Matrix</th>
-            <th class="border px-4 py-2">Time taken</th>
-            <th class="border px-4 py-2">Clicks</th>
-            <th class="border px-4 py-2">Accuracy</th>
+            <th class="border px-2 py-2">Date and Time</th>
+            <th class="border px-2 py-2">No Matrix</th>
+            <th class="border px-2 py-2">Time taken</th>
+            <th class="border px-2 py-2">Clicks</th>
+            <th class="border px-2 py-2">Accuracy</th>
           </tr>
         </thead>
         <tbody id="history">
           
         </tbody>
       </table>
-      <button class="p-4 border text-xl text-green-500 " id="clear">Clear History</button>
+      <button class="p-2 border text-xl text-green-500 " id="clear">Clear History</button>
       <canvas class="absolute top-0 left-0 pointer-events-none" id="confettiCanvas"></canvas>
     </div>
  <script src="index.js"></script>

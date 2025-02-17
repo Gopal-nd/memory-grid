@@ -114,9 +114,13 @@ function checkallcorect(){
     let ref = setTimeout(() => {
       alert('Congratulations, you won! 🎉')
     }, 50);
+
   
     saveGameHistory()
-
+    setTimeout(() => {
+      
+      GenerateCombinations(2);
+    }, 3000);
   }
 }
 

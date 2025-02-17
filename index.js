@@ -2,13 +2,18 @@
 const gridSizeInput = document.getElementById('gridSize');
 const gridSizeValue = document.getElementById('gridSizeValue');
 const grid = document.getElementById('grid');
+let history = document.querySelector('#history')
+let clear = document.getElementById('clear')
 let combinations = [];
 let compareCombination = [];
 let first = null;
 let second = null;
 let canClick = true; // New flag to control click handling
-
+let clciks =0;
+let start;
+loadGameHistory();
 GenerateCombinations(2);
+
 
 function ShuffleElement(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -30,10 +35,13 @@ function GenerateCombinations(n) {
   combinations = combinations.slice(0, n * n / 2);
   compareCombination = combinations.concat(combinations);
   compareCombination = ShuffleElement(compareCombination);
+  start = Date.now()
+
   createGrid(n);
 }
 
 function createGrid(n) {
+  clciks=0
   first = null;
   second = null;
   canClick = true; // Reset click flag when grid changes
@@ -73,6 +81,8 @@ function handleCardClick(e) {
       second.classList.add('matched');
       first.classList.remove('selected');
       second.classList.remove('selected');
+      clciks++;
+      checkallcorect()
       first = null;
       second = null;
       canClick = true;
@@ -86,8 +96,27 @@ function handleCardClick(e) {
         first = null;
         second = null;
         canClick = true;
+        clciks++
       }, 600);
     }
+  }
+}
+
+function checkallcorect(){
+  let arr = grid.querySelectorAll('div')
+  let  matched = 0;
+  arr.forEach((a)=>{
+    if(a.classList.contains('matched')){
+      matched++;
+    }
+  })
+  if(arr.length === matched){
+    setTimeout(() => {
+      
+      alert('congragulations')
+    }, 500);
+    saveGameHistory()
+
   }
 }
 
@@ -98,3 +127,77 @@ gridSizeInput.addEventListener('input', () => {
 });
 
 createGrid(Number(gridSizeInput.value));
+
+
+function convertMillisToMMSS(ms) {
+  // Convert ms to seconds, rounding down to the nearest whole number
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  // Format minutes and seconds as two-digit strings
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+
+function saveGameHistory() {
+
+  let historyData = localStorage.getItem('memoryGrid')
+  let historyArry = historyData? JSON.parse(historyData) :[]
+  let time = new Date();
+  let no = gridSizeValue.innerText;
+  let takenTime = Date.now() - start;
+  let obj = {
+    time: time.toLocaleString(),
+    no: no,
+    takenTime: takenTime,
+    clciks: clciks * 2,
+    accurecy: ((no / clciks) * 100).toFixed(2)
+  };
+  historyArry.push(obj);
+  let stringifyData = JSON.stringify(historyArry);
+  localStorage.setItem("memoryGrid", stringifyData);
+  history.innerHTML += `
+    <tr>
+      <td class="border px-4 py-2">${obj.time}</td>
+      <td class="border px-4 py-2">${obj.no}</td>
+      <td class="border px-4 py-2">${convertMillisToMMSS(obj.takenTime)}</td>
+      <td class="border px-4 py-2">${obj.clciks}</td>
+      <td class="border px-4 py-2">${obj.accurecy}</td>
+    </tr>`;
+}
+
+function loadGameHistory() {
+
+  let historyData = localStorage.getItem('memoryGrid')
+  let historyArry = historyData? JSON.parse(historyData) :[]
+  let final= historyArry.map(obj => 
+    `
+    <tr>
+    <td class="border px-4 py-2">${obj.time}</td>
+    <td class="border px-4 py-2">${obj.no}</td>
+    <td class="border px-4 py-2">${convertMillisToMMSS(obj.takenTime)}</td>
+    <td class="border px-4 py-2">${obj.clciks}</td>
+    <td class="border px-4 py-2">${obj.accurecy}</td>
+    </tr>`
+  ).join('');
+  
+  history.innerHTML = final;
+}
+
+
+clear.addEventListener('click',(e)=>{
+  e.preventDefault()
+  let historyData = localStorage.getItem('memoryGrid')
+  let historyArry = historyData? JSON.parse(historyData) :[]
+  if(!historyArry.length){
+      return
+  }
+  let conformation = confirm('Are you sure to remove the History')
+  if(conformation){
+      localStorage.clear('history')
+      history.innerHTML=null
+  }
+
+})
+
+

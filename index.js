@@ -111,10 +111,10 @@ function checkallcorect(){
     }
   })
   if(arr.length === matched){
-    setTimeout(() => {
-      
-      alert('congragulations')
-    }, 500);
+    let ref = setTimeout(() => {
+      alert('Congratulations, you won! 🎉')
+    }, 50);
+  
     saveGameHistory()
 
   }
@@ -162,7 +162,7 @@ function saveGameHistory() {
       <td class="border px-4 py-2">${obj.no}</td>
       <td class="border px-4 py-2">${convertMillisToMMSS(obj.takenTime)}</td>
       <td class="border px-4 py-2">${obj.clciks}</td>
-      <td class="border px-4 py-2">${obj.accurecy}</td>
+      <td class="border px-4 py-2">${obj.accurecy}%</td>
     </tr>`;
 }
 
@@ -177,7 +177,7 @@ function loadGameHistory() {
     <td class="border px-4 py-2">${obj.no}</td>
     <td class="border px-4 py-2">${convertMillisToMMSS(obj.takenTime)}</td>
     <td class="border px-4 py-2">${obj.clciks}</td>
-    <td class="border px-4 py-2">${obj.accurecy}</td>
+    <td class="border px-4 py-2">${obj.accurecy}%</td>
     </tr>`
   ).join('');
   
@@ -199,5 +199,54 @@ clear.addEventListener('click',(e)=>{
   }
 
 })
+
+
+const canvas = document.getElementById("confettiCanvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let confetti = [];
+
+    function createConfetti() {
+        return {
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+            size: Math.random() * 8 + 2,
+            speedY: Math.random() * 3 + 1,
+            speedX: Math.random() * 2 - 1,
+            angle: Math.random() * 360,
+        };
+    }
+
+    function initConfetti() {
+        for (let i = 0; i < 200; i++) {
+            confetti.push(createConfetti());
+        }
+    }
+
+function drawConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  confetti.forEach((c) => {
+      ctx.fillStyle = c.color;
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Update position
+      c.y += c.speedY;
+      c.x += c.speedX;
+
+      // Reset when confetti falls off
+      if (c.y > canvas.height) {
+          c.y = -10;
+          c.x = Math.random() * canvas.width;
+      }
+  });
+
+  requestAnimationFrame(drawConfetti);
+}
 
 
